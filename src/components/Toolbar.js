@@ -3,29 +3,24 @@ import React from 'react'
 const Toolbar = ({ labels, entryVisible, modifyCheckBoxes, showMessage, setReadMessages, messageCount, selectedCount, unreadCount, addLabel, removeLabel, deleteMessages }) => {
 
     const readClicked = (e) => {
-        e.preventDefault();
         setReadMessages(true);
     }
 
     const unReadClicked = (e) => {
-        e.preventDefault();
         setReadMessages(false);
     }
 
     const applyLabelClicked = (e) => {
-        e.preventDefault();
         addLabel(e.target.value);
         e.target.selectedIndex = 0;
     }
 
     const removeLabelClicked = (e) => {
-        e.preventDefault();
         removeLabel(e.target.value);
         e.target.selectedIndex = 0;
     }
 
     const deleteClicked = (e) => {
-        e.preventDefault();
         deleteMessages();
     }
 
