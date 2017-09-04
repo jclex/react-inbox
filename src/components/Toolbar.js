@@ -35,9 +35,8 @@ const Toolbar = ({ labels, entryVisible, modifyCheckBoxes, showMessage, setReadM
                         <i className={ entryVisible ? "fa fa-minus" : "fa fa-plus" } onClick={ showMessage }></i>
                     </a>
 
-                    <button className="btn btn-default">
-                        <i className={ "fa " + ( selectedCount === 0 ? "fa-square-o" : ( selectedCount === messageCount ? "fa-check-square-o" : "fa-minus-square-o" ))}
-                           onClick={ modifyCheckBoxes }></i>
+                    <button className="btn btn-default" onClick={ modifyCheckBoxes }>
+                        <i className={ "fa " + ( selectedCount === 0 ? "fa-square-o" : ( selectedCount === messageCount ? "fa-check-square-o" : "fa-minus-square-o" ))}></i>
                     </button>
 
                     <button className="btn btn-default" disabled={ selectedCount > 0 ? "" : "disabled" } onClick={ readClicked }>
