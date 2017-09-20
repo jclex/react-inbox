@@ -1,27 +1,40 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { showComposeForm, toolbarCheckboxes, messagesRead, messagesAddLabel, messagesRemoveLabel, messagesDelete } from '../actions'
 
-const Toolbar = ({ labels, entryVisible, modifyCheckBoxes, showMessage, setReadMessages, messageCount, selectedCount, unreadCount, addLabel, removeLabel, deleteMessages }) => {
+const Toolbar = ({ entryVisible, showComposeForm, toolbarCheckboxes, messagesRead, messageCount, selectedIds, allIds, selectedCount, unreadCount, messagesAddLabel, messagesRemoveLabel, messagesDelete }) => {
+
+    const labels = ['dev', 'personal', 'gSchool', 'test'];
+
+    const showComposeFormClicked = (e) => {
+        showComposeForm(entryVisible);
+    }
+
+    const checkBoxesClicked = (e) => {
+        toolbarCheckboxes(selectedCount, messageCount, allIds);
+    }
 
     const readClicked = (e) => {
-        setReadMessages(true);
+        messagesRead(selectedIds, true);
     }
 
     const unReadClicked = (e) => {
-        setReadMessages(false);
+        messagesRead(selectedIds, false);
     }
 
     const applyLabelClicked = (e) => {
-        addLabel(e.target.value);
+        messagesAddLabel(selectedIds, e.target.value);
         e.target.selectedIndex = 0;
     }
 
     const removeLabelClicked = (e) => {
-        removeLabel(e.target.value);
+        messagesRemoveLabel(selectedIds, e.target.value);
         e.target.selectedIndex = 0;
     }
 
     const deleteClicked = (e) => {
-        deleteMessages();
+        messagesDelete(selectedIds);
     }
 
     return  <div className="row toolbar">
@@ -32,10 +45,10 @@ const Toolbar = ({ labels, entryVisible, modifyCheckBoxes, showMessage, setReadM
                     </p>
 
                     <a className="btn btn-danger">
-                        <i className={ entryVisible ? "fa fa-minus" : "fa fa-plus" } onClick={ showMessage }></i>
+                        <i className={ entryVisible ? "fa fa-minus" : "fa fa-plus" } onClick={ showComposeFormClicked }></i>
                     </a>
 
-                    <button className="btn btn-default" onClick={ modifyCheckBoxes }>
+                    <button className="btn btn-default" onClick={ checkBoxesClicked }>
                         <i className={ "fa " + ( selectedCount === 0 ? "fa-square-o" : ( selectedCount === messageCount ? "fa-check-square-o" : "fa-minus-square-o" ))}></i>
                     </button>
 
@@ -64,4 +77,25 @@ const Toolbar = ({ labels, entryVisible, modifyCheckBoxes, showMessage, setReadM
             </div>
 }
 
-export default Toolbar;
+const mapStateToProps = state => ({
+    entryVisible: state.toolbar.entryVisible,
+    messageCount: state.messages.all.length,
+    selectedIds: state.toolbar.selectedIds,
+    allIds: state.messages.all.map( message => { return message.id }),
+    selectedCount: state.messages.all.reduce( ( total, message ) => total + ( message.selected === true ? 1 : 0 ), 0 ),
+    unreadCount: state.messages.all.reduce( ( total, message ) => total + ( message.read ? 0 : 1 ), 0 ),
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    showComposeForm,
+    toolbarCheckboxes,
+    messagesRead,
+    messagesAddLabel,
+    messagesRemoveLabel,
+    messagesDelete,
+}, dispatch)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Toolbar)

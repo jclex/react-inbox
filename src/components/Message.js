@@ -1,13 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { messageChecked, messageStarred } from "../actions/index";
 
-const Message = ({ message, checkClicked, starClicked }) => {
+const Message = ({ message, messageChecked, messageStarred }) => {
 
     const checkClick = (e) => {
-        checkClicked(message.id, message.selected);
+        messageChecked(message.id, !message.selected);
     }
 
     const starClick = (e) => {
-        starClicked(message.id, message.starred);
+        messageStarred(message.id, !message.starred);
     }
 
     return  <div className={ "row message" + ( message.read ? " read" : " unread" ) + ( message.selected ? " selected" : "" ) }>
@@ -30,4 +33,15 @@ const Message = ({ message, checkClicked, starClicked }) => {
             </div>
 }
 
-export default Message;
+const mapStateToProps = state => ({
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    messageChecked,
+    messageStarred,
+}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Message)

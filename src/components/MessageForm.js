@@ -1,21 +1,17 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { messageCreate } from '../actions'
 
-const MessageForm = ({ addMessage }) => {
+const MessageForm = ({ messageCreate }) => {
 
-    const messageSubmitted = (e) => {
+    const createMessageClicked = (e) => {
         e.preventDefault();
-        addMessage({
-            read: false,
-            starred: false,
-            selected: false,
-            subject: e.target.subject.value,
-            body: e.target.body.value,
-            labels: []
-        })
+        messageCreate(e.target.subject.value, e.target.body.value);
     }
 
     return  <div className="row">
-                <form className="form-horizontal well" onSubmit={ messageSubmitted }>
+                <form className="form-horizontal well" onSubmit={ createMessageClicked }>
                     <div className="form-group">
                         <div className="col-sm-8 col-sm-offset-2">
                             <h4>Compose Message</h4>
@@ -43,4 +39,14 @@ const MessageForm = ({ addMessage }) => {
             </div>
 }
 
-export default MessageForm;
+const mapStateToProps = state => ({
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    messageCreate,
+}, dispatch)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MessageForm)
