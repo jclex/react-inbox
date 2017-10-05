@@ -1,15 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { showComposeForm, toolbarCheckboxes, messagesRead, messagesAddLabel, messagesRemoveLabel, messagesDelete } from '../actions'
+import { toolbarCheckboxes, messagesRead, messagesAddLabel, messagesRemoveLabel, messagesDelete } from '../actions'
+import { withRouter, Route, Link, Switch } from 'react-router-dom';
 
-const Toolbar = ({ entryVisible, showComposeForm, toolbarCheckboxes, messagesRead, messageCount, selectedIds, allIds, selectedCount, unreadCount, messagesAddLabel, messagesRemoveLabel, messagesDelete }) => {
+const Toolbar = ({ toolbarCheckboxes, messagesRead, messageCount, selectedIds, allIds, selectedCount, unreadCount, messagesAddLabel, messagesRemoveLabel, messagesDelete }) => {
 
     const labels = ['dev', 'personal', 'gSchool', 'test'];
-
-    const showComposeFormClicked = (e) => {
-        showComposeForm(entryVisible);
-    }
 
     const checkBoxesClicked = (e) => {
         toolbarCheckboxes(selectedCount, messageCount, allIds);
@@ -44,9 +41,21 @@ const Toolbar = ({ entryVisible, showComposeForm, toolbarCheckboxes, messagesRea
                         unread messages
                     </p>
 
-                    <a className="btn btn-danger">
-                        <i className={ entryVisible ? "fa fa-minus" : "fa fa-plus" } onClick={ showComposeFormClicked }></i>
-                    </a>
+                    <Switch>
+
+                        <Route path="/compose" exact render={() => {
+                            return  <Link to="/" className="btn btn-danger">
+                                <i className="fa fa-minus"></i>
+                            </Link>
+                        }} />
+
+                        <Route render={() => {
+                            return  <Link to="/compose" className="btn btn-danger">
+                                <i className="fa fa-plus"></i>
+                            </Link>
+                        }} />
+
+                    </Switch>
 
                     <button className="btn btn-default" onClick={ checkBoxesClicked }>
                         <i className={ "fa " + ( selectedCount === 0 ? "fa-square-o" : ( selectedCount === messageCount ? "fa-check-square-o" : "fa-minus-square-o" ))}></i>
@@ -78,7 +87,6 @@ const Toolbar = ({ entryVisible, showComposeForm, toolbarCheckboxes, messagesRea
 }
 
 const mapStateToProps = state => ({
-    entryVisible: state.toolbar.entryVisible,
     messageCount: state.messages.all.length,
     selectedIds: state.toolbar.selectedIds,
     allIds: state.messages.all.map( message => { return message.id }),
@@ -87,7 +95,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    showComposeForm,
     toolbarCheckboxes,
     messagesRead,
     messagesAddLabel,
@@ -95,7 +102,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     messagesDelete,
 }, dispatch)
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Toolbar)
+)(Toolbar))

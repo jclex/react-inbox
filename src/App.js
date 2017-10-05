@@ -6,6 +6,7 @@ import MessageList from './components/MessageList'
 import { fetchMessages } from './actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 class App extends Component {
 
@@ -15,11 +16,13 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <Toolbar />
-                { this.props.toolbar.entryVisible ? <MessageForm /> : <div></div> }
-                <MessageList />
-            </div>
+            <Router>
+                <div className="App">
+                    <Route path="/" component={Toolbar} />
+                    <Route path="/compose" component={MessageForm} />
+                    <MessageList />
+                </div>
+            </Router>
         );
     }
 }

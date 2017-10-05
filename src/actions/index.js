@@ -11,9 +11,24 @@ export function fetchMessages() {
     }
 }
 
+export const MESSAGE_BODY_RECEIVED = 'MESSAGE_BODY_RECEIVED';
+
+export function fetchMessageBody(id) {
+    return async (dispatch) => {
+        const response = await fetch('/api/messages/' + id)
+        const json = await response.json()
+
+        dispatch({
+            type: MESSAGE_BODY_RECEIVED,
+            id,
+            body: json.body
+        })
+    }
+}
+
 export const MESSAGE_CREATE = 'MESSAGE_CREATE'
 
-export function messageCreate(subject, body) {
+export function messageCreate(subject, body, history) {
     return async (dispatch) => {
 
         await fetch('/api/messages', {
@@ -35,6 +50,8 @@ export function messageCreate(subject, body) {
             type: MESSAGE_CREATE,
             messages: json._embedded.messages
         })
+
+        history.push("/");
     }
 }
 
@@ -170,15 +187,6 @@ export function messagesDelete(selectedIds) {
             type: MESSAGES_DELETE,
             selectedIds,
         })
-    }
-}
-
-export const TOOLBAR_ENTRY_VISIBLE = 'TOOLBAR_ENTRY_VISIBLE'
-
-export function showComposeForm(show) {
-    return {
-        type: TOOLBAR_ENTRY_VISIBLE,
-        show: !show,
     }
 }
 

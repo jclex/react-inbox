@@ -2,12 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { messageCreate } from '../actions'
+import { withRouter } from 'react-router-dom';
 
-const MessageForm = ({ messageCreate }) => {
+const MessageForm = ({ messageCreate, history }) => {
 
     const createMessageClicked = (e) => {
         e.preventDefault();
-        messageCreate(e.target.subject.value, e.target.body.value);
+        messageCreate(e.target.subject.value, e.target.body.value, history);
     }
 
     return  <div className="row">
@@ -32,7 +33,7 @@ const MessageForm = ({ messageCreate }) => {
                     </div>
                     <div className="form-group">
                         <div className="col-sm-8 col-sm-offset-2">
-                            <input type="submit" value="Send" className="btn btn-primary"/>
+                            <input type="submit" value="Send" className="btn btn-primary" />
                         </div>
                     </div>
                 </form>
@@ -46,7 +47,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     messageCreate,
 }, dispatch)
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(MessageForm)
+)(MessageForm))

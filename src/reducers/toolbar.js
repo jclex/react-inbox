@@ -1,12 +1,7 @@
-import { TOOLBAR_ENTRY_VISIBLE, TOOLBAR_CHECKBOXES_SELECTED, MESSAGE_CREATE, MESSAGES_READ, MESSAGE_CHECKED } from '../actions'
+import { TOOLBAR_CHECKBOXES_SELECTED, MESSAGE_CREATE, MESSAGES_READ, MESSAGE_CHECKED } from '../actions'
 
-function toolbar(state = { entryVisible: false, selectedIds: [], refresh: false }, action) {
+function toolbar(state = { selectedIds: [], refresh: false }, action) {
     switch (action.type) {
-        case TOOLBAR_ENTRY_VISIBLE:
-            return {
-                ...state,
-                entryVisible: action.show,
-            }
         case TOOLBAR_CHECKBOXES_SELECTED:
             if ( action.selectedCount === action.messageCount )
                 return {
@@ -22,8 +17,7 @@ function toolbar(state = { entryVisible: false, selectedIds: [], refresh: false 
                 }
         case MESSAGE_CREATE:
             return {
-                ...state,
-                entryVisible: !state.entryVisible,
+                ...state
             }
         case MESSAGE_CHECKED:
             if ( action.checked )

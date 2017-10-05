@@ -2,8 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { messageChecked, messageStarred } from "../actions/index";
+import { withRouter, Route, Link } from 'react-router-dom';
 
-const Message = ({ message, messageChecked, messageStarred }) => {
+import MessageBody from './MessageBody';
+
+const Message = ({ message, messageChecked, messageStarred, messageRead, history }) => {
 
     const checkClick = (e) => {
         messageChecked(message.id, !message.selected);
@@ -26,11 +29,13 @@ const Message = ({ message, messageChecked, messageStarred }) => {
                 </div>
                 <div className="col-xs-11">
                     { message.labels.map( ( label, index ) => <span key={ index } className="label label-warning">{ label }</span>) }
-                    <a href="">
-                        {message.subject}
-                    </a>
+                    <Link to={ "/messages/" + message.id }>
+                        { message.subject }
+                    </Link>
                 </div>
+                <Route path={ '/messages/' + message.id } exact render={ () => <MessageBody id={ message.id } /> } />
             </div>
+
 }
 
 const mapStateToProps = state => ({
@@ -41,7 +46,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     messageStarred,
 }, dispatch);
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Message)
+)(Message))

@@ -6,7 +6,8 @@ import { MESSAGES_RECEIVED,
          MESSAGE_CREATE,
          MESSAGES_ADD_LABEL,
          MESSAGES_REMOVE_LABEL,
-         MESSAGES_DELETE } from '../actions'
+         MESSAGES_DELETE,
+         MESSAGE_BODY_RECEIVED } from '../actions'
 
 function messages(state = { all: [] }, action) {
     switch (action.type) {
@@ -14,6 +15,16 @@ function messages(state = { all: [] }, action) {
             return {
                 ...state,
                 all: action.messages
+            }
+        case MESSAGE_BODY_RECEIVED:
+            return {
+                ...state,
+                all: state.all.map( message => {
+                    if ( message.id === action.id )
+                        return { ...message, body: action.body }
+                    else
+                        return message;
+                })
             }
         case TOOLBAR_CHECKBOXES_SELECTED:
             if ( action.selectedCount === action.messageCount )
